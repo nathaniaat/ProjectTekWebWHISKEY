@@ -1,0 +1,163 @@
+:root {
+  --soft-blue: #d0e3ff;
+  --dark-blue: #334eac;
+  --green: #3bb57e;
+  --text-light: #ffffff;
+  --super-soft-blue: #edfdff;
+  --soft-pink: #fbedff;
+  --soft-yellow: #fcffd6;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.headerTxt400 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  color: var(--dark-blue);
+}
+.headerTxt700 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  color: var(--dark-blue);
+}
+
+.subheaderTxt {
+  font-family: "Bitter", serif;
+  font-weight: 500;
+  color: var(--dark-blue);
+  opacity: 0.8;
+}
+
+.bodyTxt {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  color: var(--dark-blue);
+  opacity: 0.8;
+}
+
+.text-green {
+  color: var(--green);
+}
+
+.text-yellow {
+  color: rgb(236, 224, 132);
+}
+
+.bg-soft-blue {
+  background-color: var(--soft-blue);
+}
+
+.bg-soft-pink {
+  background-color: var(--soft-pink);
+}
+
+.bg-soft-yellow {
+  background-color: var(--soft-yellow);
+}
+
+.bg-super-soft-blue {
+  background-color: var(--super-soft-blue);
+}
+
+.btn-green {
+  background-color: var(--green);
+  color: var(--text-light);
+  transition: 0.3s ease;
+}
+
+.btn-green:hover {
+  transform: scale(1.05);
+}
+
+.btn-outline-green {
+  border: 2px solid var(--green);
+  color: var(--green);
+  transition: 0.3s ease;
+}
+
+.btn-outline-green:hover {
+  background-color: var(--green);
+  color: var(--text-light);
+}
+
+.headermain {
+  height: 500px;
+  display: flex;
+  background-color: var(--soft-blue);
+  overflow: hidden;
+}
+
+.headeradmin {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+footer {
+  display: flex;
+  background-color: var(--soft-blue);
+}
+
+@media (max-width: 1024px) {
+  header {
+    height: auto;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding-top: 2rem;
+  }
+}
+
+#proofUpload {
+  cursor: pointer;
+}
+
+#uploadedFileName {
+  font-style: italic;
+}
+
+/* Wrapper untuk memotong tampilan input */
+.file-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+/* Input aslinya */
+.file-input-custom {
+  font-size: 100px; /* supaya teks bawaan bergeser jauh */
+  opacity: 0; /* sembunyikan input sebenarnya */
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* Tombol custom */
+.file-button {
+  padding: 10px 20px;
+  border: 1px solid #4caf50;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: 0.2s;
+  display: inline-block;
+}
+
+.file-button:hover {
+  background: #e8f5e9;
+}
+
+.file-input-custom::file-selector-button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #4caf50;
+  background: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.file-input-custom::file-selector-button:hover {
+  background: #e8f5e9;
+}
