@@ -197,9 +197,10 @@ $(document).ready(function () {
           if (type === "cat") {
             $("#catName").val(data.name);
             $("#catAge").val(data.age);
-            $("#catGender").val(data.gender);
+            $("#catGender").val(String(data.gender).trim().replace(/^\w/, (c) => c.toUpperCase()));
             $("#catBackstory").val(data.backstory);
             $("#catBgColor").val(data.bg_color);
+            $("#catImage").prop("required", false);
             // ... (Set tombol edit) ...
           } else {
             // Education
@@ -209,6 +210,7 @@ $(document).ready(function () {
             $("#eduContent").val(data.content || "");
             $("#eduCategory").val(data.category || "");
             $("#eduTeaserContent").val(data.teaser_content || "");
+            $("#eduImage").prop("required", false);
             // ... (Set tombol edit) ...
           }
 
@@ -372,6 +374,7 @@ $(document).ready(function () {
     $("#addCatForm")[0].reset();
     $("#addCatForm").removeData("current-image-url"); // Clear old URL data
     $("#catFileName").text("(Belum ada file dipilih)"); // Reset display
+    $("#catImage").prop("required", true);
     $("#addCatFormContainer").find("h3").text("Form Tambah Kucing");
     $("#addCatForm")
       .find('button[type="submit"]')
@@ -388,6 +391,7 @@ $(document).ready(function () {
     $("#addEducationForm")[0].reset();
     $("#addEducationForm").removeData("current-image-url"); // Clear old URL data
     $("#eduFileName").text("(Belum ada file dipilih)"); // Reset display
+    $("#eduImage").prop("required", true);
     $("#addEducationFormContainer").find("h3").text("Form Tambah Artikel");
     $("#addEducationForm")
       .find('button[type="submit"]')
