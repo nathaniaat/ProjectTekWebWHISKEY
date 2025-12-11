@@ -82,17 +82,17 @@ html {
   color: var(--text-light);
 }
 
+.headeradmin {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
 .headermain {
   height: 500px;
   display: flex;
   background-color: var(--soft-blue);
   overflow: hidden;
-}
-
-.headeradmin {
-  display: flex;
-  justify-content: center;
-  text-align: center;
 }
 
 footer {

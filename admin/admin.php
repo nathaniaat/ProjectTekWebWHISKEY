@@ -33,53 +33,53 @@ $counts_data = [
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard - Whiskey Shelter</title>
+    <title>Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" href="../style.css"> 
 </head>
-<body class="bg-gray-100 p-4 sm:p-8">
-    <header class="headeradmin mb-8 flex justify-between items-center">
-        <h1 class="text-4xl font-bold text-indigo-700">Admin WHISKEY</h1>
+<body class="p-4 sm:p-8 bg-soft-blue">
+    <header class="headeradmin mb-8 flex flex-row justify-between items-center">
+        <img class="w-64" src="../img/Whiskey.png" alt="..." />
         <a href="../logout.php" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 font-semibold text-base">Logout</a>
     </header>
     
     <div class="bg-white p-6 rounded-xl shadow-lg mb-8 border border-indigo-200">
-        <h2 class="text-2xl font-bold mb-4 text-indigo-700 border-b pb-2">Kelola Kucing 🐾</h2>
+        <h2 class="text-2xl font-bold mb-4 text-[#334eac] border-b pb-2">Cat Gallery</h2>
         
         <button id="showAddCatFormBtn" class="btn-green px-4 py-2 rounded-lg font-semibold mb-4">
-            + Tambah Kucing Baru
+            + Add New Cat
         </button>
 
         <div id="addCatFormContainer" class="bg-indigo-50 p-4 rounded-lg mb-4 hidden">
-            <h3 class="font-bold mb-3">Form Tambah Kucing</h3>
+            <h3 class="font-bold mb-3">Add New Cat Form</h3>
             <form id="addCatForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div class="md:col-span-1">
-                    <label for="catName" class="block text-xs font-medium text-gray-700 mb-1">Nama Kucing</label>
-                    <input type="text" id="catName" placeholder="Nama Kucing" class="w-full p-2 border rounded" required>
+                    <label for="catName" class="block text-xs font-medium text-gray-700 mb-1">Cat Name</label>
+                    <input type="text" id="catName" placeholder="Cat Name" class="w-full p-2 border rounded" required>
                 </div>
 
                 <div class="md:col-span-1">
-                    <label for="catAge" class="block text-xs font-medium text-gray-700 mb-1">Usia</label>
-                    <input type="text" id="catAge" placeholder="Usia (ex: 1 year)" class="w-full p-2 border rounded" required>
+                    <label for="catAge" class="block text-xs font-medium text-gray-700 mb-1">Age</label>
+                    <input type="text" id="catAge" placeholder="Age (ex: 1 year)" class="w-full p-2 border rounded" required>
                 </div>
 
                 <div class="md:col-span-1">
                     <label for="catGender" class="block text-xs font-medium text-gray-700 mb-1">Gender</label>
                     <select id="catGender" class="w-full p-2 border rounded" required>
-                        <option value="">Pilih Gender</option>
+                        <option value="">Select Gender</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                     </select>
                 </div>
 
                 <div class="md:col-span-3">
-    <label class="block text-xs font-medium text-gray-700 mb-2">Upload Gambar Kucing</label>
+    <label class="block text-xs font-medium text-gray-700 mb-2">Upload Cat Image</label>
 
     <div class="flex items-center space-x-3">
         <label for="catImage" class="relative inline-block cursor-pointer flex-shrink-0">
             <span class="btn-outline-green font-semibold px-4 py-1 rounded-lg shadow-sm hover:shadow-md transition duration-150">
-                Pilih Gambar
+                Choose Image
             </span>
             <input 
                 type="file" 
@@ -92,7 +92,7 @@ $counts_data = [
         </label>
         
         <span id="catFileName" class="text-sm text-gray-600 truncate max-w-[200px]">
-            (Belum ada file dipilih)
+            (No file chosen)
         </span>
     </div>
 </div>
@@ -103,15 +103,15 @@ $counts_data = [
                 </div>
 
                 <div class="md:col-span-1">
-                    <label for="catBgColor" class="block text-xs font-medium text-gray-700 mb-1">Warna Background</label>
+                    <label for="catBgColor" class="block text-xs font-medium text-gray-700 mb-1">Background Color</label>
                     <select id="catBgColor" class="w-full p-2 border rounded h-12" required>
-                        <option value="bg-soft-pink">Pink Card (bg-soft-pink)</option>
-                        <option value="bg-soft-yellow">Yellow Card (bg-soft-yellow)</option>
+                        <option value="bg-soft-pink">Pink Card</option>
+                        <option value="bg-soft-yellow">Yellow Card</option>
                     </select>
                 </div>
 
                 <div class="md:col-span-3 text-right">
-                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-semibold">Simpan Kucing</button>
+                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-semibold">Save Cat</button>
                 </div>
             </form>
         </div>
@@ -121,11 +121,11 @@ $counts_data = [
                 <thead class="bg-gray-100">
                     <tr>
                         <th class="p-3 border-b">ID</th>
-                        <th class="p-3 border-b">Nama</th>
-                        <th class="p-3 border-b">Usia</th>
+                        <th class="p-3 border-b">Name</th>
+                        <th class="p-3 border-b">Age</th>
                         <th class="p-3 border-b">Gender</th>
-                        <th class="p-3 border-b">Backstory (Ringkas)</th>
-                        <th class="p-3 border-b">Aksi</th>
+                        <th class="p-3 border-b">Backstory</th>
+                        <th class="p-3 border-b">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="masterCatList">
@@ -140,12 +140,12 @@ $counts_data = [
                             echo "<td class='p-3 text-xs truncate max-w-xs'>".substr($row['backstory'], 0, 50)."...</td>";
                             echo "<td class='p-3 space-x-2 whitespace-nowrap'>";
                             echo "<button data-id='{$row['id']}' class='edit-cat-btn text-blue-600 hover:text-blue-800 text-sm'>Edit</button>";
-                            echo "<button data-id='{$row['id']}' class='delete-cat-btn text-red-600 hover:text-red-800 text-sm'>Hapus</button>";
+                            echo "<button data-id='{$row['id']}' class='delete-cat-btn text-red-600 hover:text-red-800 text-sm'>Delete</button>";
                             echo "</td>";
                             echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='6' class='p-4 text-center text-gray-500'>Tidak ada data di tabel Kucing.</td></tr>";
+                        echo "<tr><td colspan='6' class='p-4 text-center text-gray-500'>No data in the Cats table.</td></tr>";
                     }
                     ?>
                 </tbody>
@@ -154,34 +154,34 @@ $counts_data = [
     </div>
     
     <div class="bg-white p-6 rounded-xl shadow-lg mb-8 border border-green-200">
-        <h2 class="text-2xl font-bold mb-4 text-green-700 border-b pb-2">Kelola Edukasi 📚</h2>
+        <h2 class="text-2xl font-bold mb-4 text-green-700 border-b pb-2">Education Contents</h2>
 
         <button id="showAddEducationFormBtn" class="btn-green px-4 py-2 rounded-lg font-semibold mb-4">
-            + Tambah Artikel Baru
+            + Add New Article
         </button>
 
         <div id="addEducationFormContainer" class="bg-green-50 p-4 rounded-lg mb-4 hidden">
-            <h3 class="font-bold mb-3">Form Tambah Artikel</h3>
+            <h3 class="font-bold mb-3">Add Article Form</h3>
             <form id="addEducationForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div class="md:col-span-3">
-                    <label for="eduTitle" class="block text-xs font-medium text-gray-700 mb-1">Judul Artikel</label>
-                    <input type="text" id="eduTitle" placeholder="Judul Artikel" class="w-full p-2 border rounded" required>
+                    <label for="eduTitle" class="block text-xs font-medium text-gray-700 mb-1">Article Title</label>
+                    <input type="text" id="eduTitle" placeholder="Article Title" class="w-full p-2 border rounded" required>
                 </div>
 
                 <div>
-                    <label for="eduAuthor" class="block text-xs font-medium text-gray-700 mb-1">Penulis</label>
-                    <input type="text" id="eduAuthor" placeholder="Penulis" class="w-full p-2 border rounded" required>
+                    <label for="eduAuthor" class="block text-xs font-medium text-gray-700 mb-1">Author</label>
+                    <input type="text" id="eduAuthor" placeholder="Author" class="w-full p-2 border rounded" required>
                 </div>
 
                 <div>
-                    <label for="eduDate" class="block text-xs font-medium text-gray-700 mb-1">Tanggal</label>
+                    <label for="eduDate" class="block text-xs font-medium text-gray-700 mb-1">Date</label>
                     <input type="date" id="eduDate" class="w-full p-2 border rounded" required>
                 </div>
 
                 <div>
-                    <label for="eduCategory" class="block text-xs font-medium text-gray-700 mb-1">Kategori</label>
+                    <label for="eduCategory" class="block text-xs font-medium text-gray-700 mb-1">Category</label>
                     <select id="eduCategory" class="w-full p-2 border rounded" required>
-                        <option value="">Pilih Kategori</option>
+                        <option value="">Select Category</option>
                         <option value="Tips">Tips</option>
                         <option value="Health">Health</option>
                         <option value="Behavior">Behavior</option>
@@ -189,12 +189,12 @@ $counts_data = [
                 </div>
 
                 <div class="md:col-span-3">
-    <label class="block text-xs font-medium text-gray-700 mb-2">Upload Gambar Artikel</label>
+    <label class="block text-xs font-medium text-gray-700 mb-2">Upload Article Image</label>
 
     <div class="flex items-center space-x-3">
         <label for="eduImage" class="relative inline-block cursor-pointer flex-shrink-0">
             <span class="btn-outline-green font-semibold px-4 py-1 rounded-lg shadow-sm hover:shadow-md transition duration-150">
-                Pilih Gambar
+                Choose Image
             </span>
             <input 
                 type="file" 
@@ -207,19 +207,19 @@ $counts_data = [
         </label>
         
         <span id="eduFileName" class="text-sm text-gray-600 truncate max-w-[200px]">
-            (Belum ada file dipilih)
+            (No file chosen)
         </span>
     </div>
 </div>
 
                 <div class="md:col-span-3">
-                    <label for="eduTeaserContent" class="block text-xs font-medium text-gray-700 mb-1">Ringkasan (Teaser)</label>
-                    <textarea id="eduTeaserContent" placeholder="Isi Ringkasan Konten" class="w-full p-2 border rounded h-24" required></textarea>
+                    <label for="eduTeaserContent" class="block text-xs font-medium text-gray-700 mb-1">Summary</label>
+                    <textarea id="eduTeaserContent" placeholder="Enter Content Summary" class="w-full p-2 border rounded h-24" required></textarea>
                 </div>
 
                 <div class="md:col-span-3">
-                    <label for="eduContent" class="block text-xs font-medium text-gray-700 mb-1">Konten Penuh</label>
-                    <textarea id="eduContent" placeholder="Isi Konten (lengkap)" class="w-full p-2 border rounded h-36" required></textarea>
+                    <label for="eduContent" class="block text-xs font-medium text-gray-700 mb-1">Full Content</label>
+                    <textarea id="eduContent" placeholder="Enter Full Content" class="w-full p-2 border rounded h-36" required></textarea>
                 </div>
 
                 <div class="md:col-span-3 text-right">
@@ -233,11 +233,11 @@ $counts_data = [
                 <thead class="bg-gray-100">
                     <tr>
                         <th class="p-3 border-b">ID</th>
-                        <th class="p-3 border-b">Judul</th>
-                        <th class="p-3 border-b">Penulis</th>
-                        <th class="p-3 border-b">Tanggal</th>
-                        <th class="p-3 border-b">Kategori</th>
-                        <th class="p-3 border-b">Aksi</th>
+                        <th class="p-3 border-b">Title</th>
+                        <th class="p-3 border-b">Author</th>
+                        <th class="p-3 border-b">Date</th>
+                        <th class="p-3 border-b">Category</th>
+                        <th class="p-3 border-b">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="masterEducationList">
@@ -252,12 +252,12 @@ $counts_data = [
                             echo "<td class='p-3'><span class='px-2 py-1 text-xs rounded-full bg-gray-200'>{$row['category']}</span></td>";
                             echo "<td class='p-3 space-x-2 whitespace-nowrap'>";
                             echo "<button data-id='{$row['id']}' class='edit-edu-btn text-blue-600 hover:text-blue-800 text-sm'>Edit</button>";
-                            echo "<button data-id='{$row['id']}' class='delete-edu-btn text-red-600 hover:text-red-800 text-sm'>Hapus</button>";
+                            echo "<button data-id='{$row['id']}' class='delete-edu-btn text-red-600 hover:text-red-800 text-sm'>Delete</button>";
                             echo "</td>";
                             echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='6' class='p-4 text-center text-gray-500'>Tidak ada data di tabel Edukasi.</td></tr>";
+                        echo "<tr><td colspan='6' class='p-4 text-center text-gray-500'>No data in the Education table.</td></tr>";
                     }
                     ?>
                 </tbody>
@@ -266,42 +266,42 @@ $counts_data = [
     </div>
 
     <div class="bg-white p-6 rounded-xl shadow-lg mb-8 border border-yellow-200">
-        <h2 class="text-2xl font-bold mb-4 text-yellow-700 border-b pb-2">Aplikasi Adopsi Masuk 📋</h2>
+        <h2 class="text-2xl font-bold mb-4 text-yellow-700 border-b pb-2">Adoption Applications</h2>
         <div class="overflow-x-auto">
             <table class="min-w-full table-auto text-left text-sm border-collapse">
                 <thead class="bg-gray-100">
                     <tr>
                         <th class="p-3 border-b">ID</th>
-                        <th class="p-3 border-b">Kucing</th>
-                        <th class="p-3 border-b">Nama Pengaju</th>
-                        <th class="p-3 border-b">Kontak & Email</th>
-                        <th class="p-3 border-b">Lokasi</th>
-                        <th class="p-3 border-b">Tinggal</th>
-                        <th class="p-3 border-b">Tanggal</th>
+                        <th class="p-3 border-b">Cat Name</th>
+                        <th class="p-3 border-b">Applicant Name</th>
+                        <th class="p-3 border-b">Contact & Email</th>
+                        <th class="p-3 border-b">Location</th>
+                        <th class="p-3 border-b">Residence</th>
+                        <th class="p-3 border-b">Date</th>
                     </tr>
                 </thead>
                 <tbody id="adoptionReviewList">
-                    <tr><td colspan="9" class="p-4 text-center text-gray-500">Memuat data...</td></tr>
+                    <tr><td colspan="9" class="p-4 text-center text-gray-500">Loading data...</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
     
     <div class="bg-white p-6 rounded-xl shadow-lg border border-red-200">
-        <h2 class="text-2xl font-bold mb-4 text-red-700 border-b pb-2">Data Donasi Masuk 💰</h2>
+        <h2 class="text-2xl font-bold mb-4 text-red-700 border-b pb-2">Donation Data</h2>
         <div class="overflow-x-auto">
             <table class="min-w-full table-auto text-left text-sm border-collapse">
                 <thead class="bg-gray-100">
                     <tr>
                         <th class="p-3 border-b">ID</th>
-                        <th class="p-3 border-b">Jumlah</th>
-                        <th class="p-3 border-b">Metode Bayar</th>
-                        <th class="p-3 border-b">Tanggal</th>
-                        <th class="p-3 border-b">Bukti</th>
+                        <th class="p-3 border-b">Amount</th>
+                        <th class="p-3 border-b">Payment Method</th>
+                        <th class="p-3 border-b">Date</th>
+                        <th class="p-3 border-b">Proof</th>
                     </tr>
                 </thead>
                 <tbody id="donationListBody">
-                    <tr><td colspan="5" class="p-4 text-center text-gray-500">Memuat data...</td></tr>
+                    <tr><td colspan="5" class="p-4 text-center text-gray-500">Loading data...</td></tr>
                 </tbody>
             </table>
         </div>

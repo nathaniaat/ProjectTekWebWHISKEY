@@ -80,7 +80,7 @@ check_session();
 
     <!-- ---------- HEADER SECTION ---------- -->
     <section id="header">
-      <header class="headermain pt-16 lg:pt-0 px-4 lg:px-2">
+      <header class="headermain pt-16 lg:pt-0 px-4 lg:px-2 bg-soft-blue">
         <div
           class="flex flex-col lg:flex-row justify-center items-center w-full"
         >
@@ -129,8 +129,6 @@ check_session();
         </div>
       </header>
     </section>
-    
-    <!--HEADER ENDS-->
 
     <!--ABOUT US SECTION-->
     <section class="pt-16 px-8 lg:px-2" id="aboutUsPage">
@@ -289,7 +287,7 @@ check_session();
           </button>
         </div>
 
-        <div class="grid grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
       </div>
     </section>
     <!-- ---------- ADOPTION ENDS ---------- -->
