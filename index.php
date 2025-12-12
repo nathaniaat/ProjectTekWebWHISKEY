@@ -80,7 +80,7 @@ check_session();
 
     <!-- ---------- HEADER SECTION ---------- -->
     <section id="header">
-      <header class="headermain pt-16 lg:pt-0 px-4 lg:px-2 bg-soft-blue">
+      <header class="pt-16 lg:pt-0 px-4 lg:px-2 bg-soft-blue">
         <div
           class="flex flex-col lg:flex-row justify-center items-center w-full"
         >
