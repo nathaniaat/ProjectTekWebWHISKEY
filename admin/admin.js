@@ -200,7 +200,7 @@ $(document).ready(function () {
             $("#catGender").val(data.gender);
             $("#catBackstory").val(data.backstory);
             $("#catBgColor").val(data.bg_color);
-            // ... (Set tombol edit) ...
+            $("#catImage").prop("required", false); // File tidak wajib saat edit
           } else {
             // Education
             $("#eduTitle").val(data.title || "");
@@ -209,7 +209,7 @@ $(document).ready(function () {
             $("#eduContent").val(data.content || "");
             $("#eduCategory").val(data.category || "");
             $("#eduTeaserContent").val(data.teaser_content || "");
-            // ... (Set tombol edit) ...
+            $("#eduImage").prop("required", false); // File tidak wajib saat edit
           }
 
           // Set tombol ke mode edit

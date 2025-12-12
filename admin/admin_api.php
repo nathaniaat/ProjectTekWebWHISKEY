@@ -151,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     // normalize keys
                     $name = $data['name'] ?? ($data['Name'] ?? '');
                     $age = $data['age'] ?? '';
-                    $gender = $data['gender'] ?? '';
+                    $gender = strtolower($data['gender'] ?? '');
                     $backstory = $data['backstory'] ?? '';
                     $bgColor = $data['bgColor'] ?? ($data['bg_color'] ?? '');
 

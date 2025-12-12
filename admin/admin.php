@@ -68,8 +68,8 @@ $counts_data = [
                     <label for="catGender" class="block text-xs font-medium text-gray-700 mb-1">Gender</label>
                     <select id="catGender" class="w-full p-2 border rounded" required>
                         <option value="">Select Gender</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
+                        <option value="male">male</option>
+                        <option value="female">female</option>
                     </select>
                 </div>
 
