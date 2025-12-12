@@ -20,7 +20,6 @@ check_session();
     />
     <link rel="stylesheet" href="style.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="script.js"></script>
   </head>
   <body class=>
     <!---------- NAVBAR SECTION ----------->
@@ -519,7 +518,7 @@ check_session();
             <p id="uploadedFileName" class="mt-3 text-sm text-gray-700"></p>
             <button
               id="donate_btnCheckoutFinal"
-              class="btn-green font-bold px-8 py-3 rounded-full mt-8 w-full transition duration-300 disabled:opacity-100"
+              class="btn-green font-bold px-8 py-3 rounded-full mt-8 w-full transition duration-300"
               disabled
             >
               Submit Donation
@@ -856,5 +855,6 @@ check_session();
       </div>
     </div>  
     <!-- ---------- MODAL ENDS ---------- -->
+     <script src="script.js"></script>
   </body>
 </html>

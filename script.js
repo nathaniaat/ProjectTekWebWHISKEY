@@ -322,7 +322,9 @@ $(document).ready(function () {
   };
 
   const updateCheckoutButton = () => {
-    $btnCheckout.prop("disabled", !(currentAmount > 0 && currentMethod));
+    const proofInput = document.getElementById("proofUpload");
+    const hasProof = proofInput && proofInput.files && proofInput.files.length > 0;
+    $btnCheckout.prop("disabled", !(currentAmount > 0 && currentMethod && hasProof));
   };
 
   const updateAmount = (newAmount) => {
