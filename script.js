@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  // --- NAVIGASI ---
+  // NAVIGASI
   const $allSections = $(
     "#header, #aboutUsPage, #adoptionPage, #donationPage, #educationPage, #homeArticles"
   );
@@ -9,7 +9,7 @@ $(document).ready(function () {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  // Centralized function to display the Home layout (multiple sections)
+  // HOME PAGE, HIDE PAGE LAIN
   function showHomePage() {
     hideAllSections();
     $("#header").fadeIn();
@@ -19,14 +19,13 @@ $(document).ready(function () {
     $("#homeArticles").fadeIn();
   }
 
-  // Centralized function for single section view
+  // HANYA MENAMPILKAN PAGE SESUAI NAVBAR
   function navigateToSingleSection(targetSelector) {
     hideAllSections();
     $(targetSelector).fadeIn();
   }
 
-  // --- EVENT HANDLERS ---
-  $("#homeNav").on("click", showHomePage); // Use centralized function
+  $("#homeNav").on("click", showHomePage);
 
   $("#aboutNav").on("click", function () {
     navigateToSingleSection("#aboutUsPage");
@@ -48,12 +47,9 @@ $(document).ready(function () {
     navigateToSingleSection("#educationPage");
   });
 
-  // --- INITIALIZATION ---
-  // Remove the redundant .show() calls and use the handler to set the default view
   showHomePage();
-  $("#educationPage").hide(); // Ensure education is explicitly hidden if not viewing it fully
+  $("#educationPage").hide(); 
 
-  // Helper function for date formatting
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("id-ID", {
@@ -63,15 +59,14 @@ $(document).ready(function () {
     });
   };
 
-  // --- ADOPTION LOGIC ---
+  // ADOPTION
   let allCatData = [];
-  const $catDetailModal = $("#catDetailModal"); // MODAL DETAIL DIKEMBALIKAN
+  const $catDetailModal = $("#catDetailModal");
   const $adoptionFormModal = $("#adoptionFormModal");
   const $adoptionForm = $("#adoptionForm");
-  const $catNameField = $("<input>") // Gunakan elemen jQuery temporer untuk menyimpan nama
+  const $catNameField = $("<input>")
     .attr({ type: "hidden", id: "catNameField", name: "cat_name" });
 
-  // Pastikan input hidden ada di form
   if ($("#catNameField").length === 0) {
     $adoptionForm.prepend($catNameField);
   }
@@ -81,7 +76,7 @@ $(document).ready(function () {
     $cardContainer.empty();
 
     data.forEach((cat) => {
-      const imageUrl = cat.image_url; // Memperbaiki scope variabel dan properti
+      const imageUrl = cat.image_url;
       const cardHtml = `
                 <div class="cat-card ${cat.bg_color} rounded-2xl overflow-hidden shadow-lg p-4 hover:shadow-xl transition" data-gender="${cat.gender}">
                     <img src="${imageUrl}" alt="cat ${cat.name}" class="w-full aspect-[4/3] object-cover rounded-xl mb-3" />
@@ -104,28 +99,25 @@ $(document).ready(function () {
     initializeAdoptionHandlers();
   }
 
+  // DONASI
   function initializeAdoptionHandlers() {
-    // Hapus penanganan event lama yang mungkin tertinggal
     $(".view-detail-btn").off("click");
     $(".close-modal-btn").off("click");
     $("#openAdoptionFormBtn").off("click");
     $adoptionForm.off("submit");
     $(document).off("click.modal_close");
 
-    // 1. Tampilkan Modal Detail (View)
     $(".view-detail-btn").on("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
 
       const catName = $(this).data("name");
 
-      // Set konten modal detail
       $("#modalCatName").text(catName);
       $("#modalCatAge").text($(this).data("age"));
       $("#modalCatGender").text($(this).data("gender"));
       $("#modalCatBackstory").text($(this).data("backstory"));
 
-      // Simpan nama kucing di tombol "Adopt Me!" untuk langkah selanjutnya
       $("#openAdoptionFormBtn").data("cat-name", catName);
 
       $catDetailModal.removeClass("hidden").addClass("flex");
@@ -135,17 +127,16 @@ $(document).ready(function () {
         .addClass("scale-100");
     });
 
-    // 2. Klik "Adopt Me!" (Dari Modal Detail ke Form)
+    // ADOPSI
     $("#openAdoptionFormBtn").on("click", function () {
-      closeModal("#catDetailModal"); // Tutup modal detail
+      closeModal("#catDetailModal"); 
 
       const catName = $(this).data("cat-name");
+    
+      $("#catNameField").val(catName);
+      $adoptionForm[0].reset();
 
-      // SINKRONISASI DATA KE FORM
-      $("#catNameField").val(catName); // Isi nama kucing di input hidden
-      $adoptionForm[0].reset(); // Reset form lain (kecuali input hidden)
-
-      // Tampilkan modal form
+      // MODAL FORM
       setTimeout(() => {
         $adoptionFormModal.removeClass("hidden").addClass("flex");
         $adoptionFormModal
@@ -155,14 +146,14 @@ $(document).ready(function () {
       }, 100);
     });
 
-    // 3. Submit Form Adopsi (mengirim ke api.php)
+    // SUBMIT FORM ADOPSI
     $adoptionForm.on("submit", function (event) {
       event.preventDefault();
 
       const catName = $("#catNameField").val();
       const formData = {
         action: "submitAdoption",
-        cat_name: catName, // Mengambil dari input hidden
+        cat_name: catName,
         firstName: $("#firstName").val(),
         lastName: $("#lastName").val(),
         email: $("#email").val(),
@@ -172,7 +163,6 @@ $(document).ready(function () {
         residenceType: $("#residenceType").val(),
       };
 
-      // AJAX POST ke api.php
       $.post("api.php", formData, function (response) {
         try {
           if (typeof response === "string") response = JSON.parse(response);
@@ -182,18 +172,9 @@ $(document).ready(function () {
         }
 
         if (response && response.success) {
-          // --- PERUBAHAN KRITIS DIMULAI DI SINI ---
-
-          // 1. Tutup modal form adopsi
           closeModal("#adoptionFormModal");
-
-          // 2. Tampilkan modal sukses kustom
-          $("#adoptionSuccessModal").removeClass("hidden").addClass("flex");
-
-          // 3. Reset formulir
+          $("#adoptionSuccessModal").removeCla
           $adoptionForm[0].reset();
-
-          // --- PERUBAHAN KRITIS BERAKHIR DI SINI ---
         } else {
           alert(
             "Gagal mengirim permintaan adopsi: " +
@@ -205,11 +186,10 @@ $(document).ready(function () {
       });
     });
 
-    // 4. Tambahkan handler untuk menutup Modal Sukses Adopsi
     $("#adoptionSuccessModal button").on("click", function () {
       closeModal("#adoptionSuccessModal");
     });
-    // Close modal when clicking on overlay background (not inside content)
+
     $catDetailModal.on("click", function (e) {
       if (e.target === this) closeModal("#catDetailModal");
     });
@@ -222,14 +202,12 @@ $(document).ready(function () {
       if (e.target === this) closeModal("#adoptionSuccessModal");
     });
 
-    // Close buttons inside any modal (delegated to support dynamic content)
     $(document).on("click", ".close-modal-btn", function (e) {
       e.preventDefault();
       const $m = $(this).closest("[id$='Modal']");
       if ($m.length) closeModal("#" + $m.attr("id"));
     });
 
-    // Fallback: global click listener using closest() to check if click was outside modal content
     $(document).on("click.modal_close", function (event) {
       if (
         $catDetailModal.hasClass("flex") &&
@@ -254,7 +232,7 @@ $(document).ready(function () {
     }, 200);
   }
 
-  // Load Kucing dari API
+  // LOAD DATA KUCING DARI API
   $.getJSON("api.php?action=getCats", function (response) {
     if (response.success) {
       allCatData = response.data;
@@ -266,7 +244,7 @@ $(document).ready(function () {
     console.error("Gagal terhubung ke api.php (Cats).");
   });
 
-  // Filter Kucing (Menggunakan cat.gender, sudah benar)
+  // FILTER KUCING
   $(".filter-btn").on("click", function () {
     const filterType = $(this).data("filter");
     $(".filter-btn").removeClass("btn-green").addClass("btn-outline-green");
@@ -282,7 +260,7 @@ $(document).ready(function () {
     .removeClass("btn-outline-green")
     .addClass("btn-green");
 
-  // --- DONATION LOGIC (TETAP SAMA) ---
+  // DONASI
   const scrollBtn = document.getElementById("scrollToContact");
   const contactSection = document.getElementById("contact");
   if (scrollBtn && contactSection) {
@@ -356,7 +334,6 @@ $(document).ready(function () {
     updateCheckoutButton();
   }
 
-  // Event listeners Donation
   const proofInput = document.getElementById("proofUpload");
   if (proofInput) {
     proofInput.addEventListener("change", function () {
@@ -431,7 +408,6 @@ $(document).ready(function () {
       formData.append("payment_method", currentMethod);
       if (file) formData.append("proof", file);
 
-      // Disable button to prevent double submits
       $btnCheckout.prop("disabled", true).text("Submitting...");
 
       $.ajax({
@@ -473,11 +449,9 @@ $(document).ready(function () {
     $donationSummary.text(formatRupiah(0));
   }
 
-  // --- EDUCATION LOGIC (MEMPERBAIKI GAMBAR) ---
   let articlesData = [];
 
   function renderArticles(data) {
-    // --- render preview di home ---
     const homeContainer = $("#home-articles-container");
     if (homeContainer.length) {
       homeContainer.empty();
@@ -506,7 +480,6 @@ $(document).ready(function () {
       });
     }
 
-    // --- render full di edu page ---
     const eduContainer = $("#education-articles-container");
     if (eduContainer.length) {
       eduContainer.empty();
@@ -548,7 +521,6 @@ $(document).ready(function () {
       });
     }
 
-    // Logic untuk Load More Button
     if (data.length > 2) {
       $("#loadMoreBtn").show();
     } else {
@@ -568,7 +540,7 @@ $(document).ready(function () {
     console.error("Gagal terhubung ke api.php (Education).");
   });
 
-  // MODAL READ MORE (Disesuaikan untuk content dari DB)
+  // MODAL READ MORE
   $(document).on("click", ".read-more-article", function (e) {
     e.preventDefault();
     $("#articleModalTitle").text($(this).data("title"));
@@ -585,7 +557,7 @@ $(document).ready(function () {
     if (e.target === this) $(this).addClass("hidden").removeClass("flex");
   });
 
-  // SEARCH dan FILTER LOGIC
+  // SEARCH & FILTER
   function performSearch() {
     const value = $("#articleSearchInput").val().toLowerCase().trim();
     $(".article-item").each(function () {
@@ -603,20 +575,17 @@ $(document).ready(function () {
     e.preventDefault();
     const category = $(this).text().trim();
 
-    // Reset styling
     $(".category-filter").removeClass(
       "shadow-md font-bold ring-2 ring-offset-2 ring-blue-500 ring-pink-500 ring-green-500"
     );
 
-    // Cek filter
     if (category === "Show All") {
       $("#articleSearchInput").val("");
       $(".article-item").removeClass("hidden").show();
-      renderArticles(articlesData); // Render ulang untuk reset load more logic
+      renderArticles(articlesData);
     } else {
       $("#articleSearchInput").val("");
 
-      // Highlight tombol
       $(this).addClass(
         "shadow-md font-bold ring-2 ring-offset-2 ring-blue-500"
       );
@@ -633,7 +602,6 @@ $(document).ready(function () {
     }
   });
 
-  // LOAD MORE / VIEW LESS
   $("#loadMoreBtn").on("click", function (e) {
     e.preventDefault();
     const $btn = $(this);

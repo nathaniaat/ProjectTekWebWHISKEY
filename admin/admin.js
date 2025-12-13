@@ -1,8 +1,7 @@
-// admin/admin.js
 const ADMIN_API_URL = "admin_api.php";
 
 $(document).ready(function () {
-  // Helper function for AJAX POST requests (JSON - digunakan untuk DELETE)
+  // DELETE
   function sendAdminRequest(action, data) {
     $.ajax({
       url: ADMIN_API_URL,
@@ -27,7 +26,7 @@ $(document).ready(function () {
     });
   }
 
-  // Helper function for AJAX POST requests (FormData - digunakan untuk ADD/UPDATE dengan file)
+  // ADD/UPDATE
   function sendAdminUploadRequest(action, formData) {
     formData.append("action", action);
 
@@ -35,8 +34,8 @@ $(document).ready(function () {
       url: ADMIN_API_URL,
       type: "POST",
       data: formData,
-      processData: false, // Wajib untuk FormData
-      contentType: false, // Wajib untuk FormData
+      processData: false,
+      contentType: false,
       success: function (response) {
         if (typeof response === "string") {
           try {
@@ -60,7 +59,7 @@ $(document).ready(function () {
     });
   }
 
-  // Helper function for Rupiah formatting
+  // FORMAT RUPIAH
   function formatRupiah(amount) {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -69,14 +68,12 @@ $(document).ready(function () {
     }).format(amount);
   }
 
-  // Helper function untuk mengumpulkan data dasar form dan file
   function getFormDataAndFile(formId, fileInputId) {
     const formData = new FormData();
     const fileInput = document.getElementById(fileInputId);
     const file = fileInput.files[0];
     const mode = $(formId).find('button[type="submit"]').data("mode") || "add";
 
-    // Tambahkan semua input teks ke FormData
     $(
       formId +
         ' input[type="text"], ' +
@@ -87,30 +84,24 @@ $(document).ready(function () {
         formId +
         " textarea"
     ).each(function () {
-      // Menggunakan nama ID elemen sebagai key, setelah menghapus prefix 'cat' atau 'edu'
-      // Convert to lowerCamelCase so server receives consistent keys (e.g. 'Title' -> 'title', 'BgColor' -> 'bgColor')
       const rawId = $(this).attr("id") || "";
       let key = rawId.replace(/^(cat|edu)/i, "");
       if (key.length > 0) {
         key = key.charAt(0).toLowerCase() + key.slice(1);
       }
-      // Special-case mapping to match server-side expected keys
       const rid = rawId.toLowerCase();
       if (rid === "educontent") key = "fullContent";
       formData.append(key, $(this).val());
     });
 
-    // Tambahkan ID jika mode edit
     const id = $(formId).find('button[type="submit"]').data("id");
     if (mode === "edit" && id) {
       formData.append("id", id);
     }
 
-    // Penanganan File
     if (file) {
       formData.append("image_file", file);
     } else if (mode === "edit") {
-      // Jika mode edit, kirim URL lama yang sudah di-set di data atribut form
       const currentUrl = $(formId).data("current-image-url") || "";
       formData.append("current_image_url", currentUrl);
     }
@@ -118,7 +109,6 @@ $(document).ready(function () {
     return { mode: mode, formData: formData, id: id };
   }
 
-  // Helper untuk menampilkan nama file yang dipilih (Digunakan untuk Kucing dan Edukasi)
   const updateFileNameDisplay = (inputElementId, displayElementId) => {
     const fileInput = document.getElementById(inputElementId);
     const fileNameDisplay = document.getElementById(displayElementId);
@@ -134,11 +124,7 @@ $(document).ready(function () {
     }
   };
 
-  // ===================================
-  // I. LOGIKA FORM TAMBAH (ADD/UPDATE) - Menggunakan FormData
-  // ===================================
-
-  // 1. Tambah/Update Kucing
+  // TAMBAH/UPDATE KUCING
   $("#addCatForm").on("submit", function (e) {
     e.preventDefault();
     const { mode, formData } = getFormDataAndFile("#addCatForm", "catImage");
@@ -146,7 +132,7 @@ $(document).ready(function () {
     sendAdminUploadRequest(action, formData);
   });
 
-  // 2. Tambah/Update Edukasi
+  // TAMBAH/UPDATE ARTIKEL
   $("#addEducationForm").on("submit", function (e) {
     e.preventDefault();
     const { mode, formData } = getFormDataAndFile(
@@ -157,19 +143,15 @@ $(document).ready(function () {
     sendAdminUploadRequest(action, formData);
   });
 
-  // ===================================
-  // II. LOGIKA EDIT (READ ONE untuk Edit Form)
-  // ===================================
-
+  // EDIT
   function loadEditForm(id, type) {
     const action = type === "cat" ? "getCatDetails" : "getEducationDetails";
     const formContainerId =
       type === "cat" ? "#addCatFormContainer" : "#addEducationFormContainer";
     const formId = type === "cat" ? "#addCatForm" : "#addEducationForm";
 
-    // Reset the form before loading
     $(formId)[0].reset();
-    $(formId).removeData("current-image-url"); // Clear data attr
+    $(formId).removeData("current-image-url");
 
     $.getJSON(
       ADMIN_API_URL + `?action=${action}&id=${id}`,
@@ -178,41 +160,46 @@ $(document).ready(function () {
           const data = response.data;
           const imageUrl = data.image_url || "";
 
-          // Set URL lama di data atribut form untuk digunakan saat UPDATE tanpa file upload baru
           $(formId).data("current-image-url", imageUrl);
 
-          // Ganti judul form
           $(formContainerId)
             .find("h3")
             .text(`Edit ${type === "cat" ? "Kucing" : "Artikel"} ID: ${id}`);
 
-          // Reset nama file display
           const fileNameDisplayId =
             type === "cat" ? "catFileName" : "eduFileName";
-          $("#" + fileNameDisplayId).text(
-            `URL Lama: ${imageUrl.substring(imageUrl.lastIndexOf("/") + 1)}`
+
+          const fileName = imageUrl
+            ? imageUrl.substring(imageUrl.lastIndexOf("/") + 1)
+            : "(Tidak ada)";
+
+          const href = imageUrl.startsWith("http")
+            ? imageUrl
+            : "../" + imageUrl;
+
+          $("#" + fileNameDisplayId).html(imageUrl? `URL Lama: <a href="${href}" target="_blank"class="text-blue-600 underline hover:text-blue-800">${fileName}</a>`
+            : "Tidak ada gambar sebelumnya"
           );
 
-          // Isi formulir
           if (type === "cat") {
+            // CATS
             $("#catName").val(data.name);
             $("#catAge").val(data.age);
             $("#catGender").val(data.gender);
             $("#catBackstory").val(data.backstory);
             $("#catBgColor").val(data.bg_color);
-            $("#catImage").prop("required", false); // File tidak wajib saat edit
+            $("#catImage").prop("required", false);
           } else {
-            // Education
+            // EDUCATION ARTICLES
             $("#eduTitle").val(data.title || "");
             $("#eduAuthor").val(data.author || "");
             $("#eduDate").val(data.publish_date || "");
             $("#eduContent").val(data.content || "");
             $("#eduCategory").val(data.category || "");
             $("#eduTeaserContent").val(data.teaser_content || "");
-            $("#eduImage").prop("required", false); // File tidak wajib saat edit
+            $("#eduImage").prop("required", false);
           }
 
-          // Set tombol ke mode edit
           $(formId)
             .find('button[type="submit"]')
             .text("Simpan Perubahan (ID " + id + ")")
@@ -221,7 +208,6 @@ $(document).ready(function () {
             .data("mode", "edit")
             .data("id", id);
 
-          // Tampilkan formulir
           $(formContainerId).slideDown(200);
         } else {
           alert("Gagal memuat detail: " + response.message);
@@ -232,23 +218,17 @@ $(document).ready(function () {
     });
   }
 
-  // Delegasi event untuk tombol Edit Kucing
   $("#masterCatList").on("click", ".edit-cat-btn", function () {
     const catId = $(this).data("id");
     loadEditForm(catId, "cat");
   });
 
-  // Delegasi event untuk tombol Edit Edukasi
   $("#masterEducationList").on("click", ".edit-edu-btn", function () {
     const eduId = $(this).data("id");
     loadEditForm(eduId, "education");
   });
 
-  // ===================================
-  // III. LOGIKA HAPUS (DELETE) & IV. MEMUAT DATA (READ)
-  // ===================================
-
-  // Delegasi event untuk Hapus Kucing
+  // HAPUS KUCING
   $("body").on("click", "#masterCatList .delete-cat-btn", function () {
     const catId = $(this).data("id");
     if (
@@ -260,7 +240,7 @@ $(document).ready(function () {
     }
   });
 
-  // Delegasi event untuk Hapus Edukasi
+  // HAPUS EDUKASI ARTIKEL
   $("body").on("click", "#masterEducationList .delete-edu-btn", function () {
     const eduId = $(this).data("id");
     if (confirm(`Yakin ingin menghapus Artikel Edukasi ID: ${eduId}?`)) {
@@ -268,7 +248,7 @@ $(document).ready(function () {
     }
   });
 
-  // Memuat Aplikasi Adopsi
+  // LOAD ADOPSI
   function loadAdoptions() {
     $.getJSON(ADMIN_API_URL + "?action=getAdoptions", function (response) {
       const $container = $("#adoptionReviewList");
@@ -276,18 +256,17 @@ $(document).ready(function () {
 
       if (response.success && response.data.length > 0) {
         response.data.forEach((app) => {
-          const row = `
-                        <tr class="border-b hover:bg-yellow-50">
-                            <td class="p-3">${app.id}</td>
-                            <td class="p-3 font-semibold">${app.cat_name}</td> 
-                            <td class="p-3">${app.first_name} ${app.last_name}</td>
-                            <td class="p-3 text-sm">${app.email}<br>${app.phone_number}</td>
-                            <td class="p-3">${app.city} (${app.postal_code})</td>
-                            <td class="p-3">${app.residence_type}</td>
-                            <td class="p-3 text-xs">${app.application_date}</td>
-                            </td>
-                        </tr>
-                    `;
+          const row = 
+            `<tr class="border-b hover:bg-yellow-50">
+              <td class="p-3">${app.id}</td>
+              <td class="p-3 font-semibold">${app.cat_name}</td> 
+              <td class="p-3">${app.first_name} ${app.last_name}</td>
+              <td class="p-3 text-sm">${app.email}<br>${app.phone_number}</td>
+              <td class="p-3">${app.city} (${app.postal_code})</td>
+              <td class="p-3">${app.residence_type}</td>
+              <td class="p-3 text-xs">${app.application_date}</td>
+              </td>
+            </tr>`;
           $container.append(row);
         });
       } else {
@@ -309,21 +288,32 @@ $(document).ready(function () {
 
       if (response.success && response.data.length > 0) {
         response.data.forEach((donation) => {
+          let proofUrl = donation.proof_image_url || "";
+          if (proofUrl && !proofUrl.startsWith("http")) {
+            proofUrl = "../" + proofUrl;
+          }
+
           const row = `
-                        <tr class="border-b hover:bg-red-50">
-                            <td class="p-3">${donation.id}</td>
-                            <td class="p-3 font-semibold text-red-700">${formatRupiah(
-                              donation.amount
-                            )}</td>
-                            <td class="p-3">${donation.payment_method}</td>
-                            <td class="p-3">${donation.donation_date}</td>
-                                <td class="p-3 whitespace-nowrap">
-                                <button data-id='${donation.id}' data-proof='${
-            donation.proof_image_url || ""
-          }' class='donation-detail-btn text-blue-600 hover:text-blue-800 text-sm'>Detail</button>
-                            </td>
-                        </tr>
-                    `;
+            <tr class="border-b hover:bg-red-50">
+              <td class="p-3">${donation.id}</td>
+              <td class="p-3 font-semibold text-red-700">
+                ${formatRupiah(donation.amount)}
+              </td>
+              <td class="p-3">${donation.payment_method}</td>
+              <td class="p-3">${donation.donation_date}</td>
+              <td class="p-3 whitespace-nowrap">
+                ${
+                  proofUrl
+                    ? `<a href="${proofUrl}" target="_blank"
+                        class="text-blue-600 hover:text-blue-800 text-sm underline">
+                        Lihat Bukti
+                      </a>`
+                    : `<span class="text-gray-400 text-sm">Tidak ada</span>`
+                }
+              </td>
+            </tr>
+          `;
+
           $container.append(row);
         });
       } else {
@@ -338,40 +328,14 @@ $(document).ready(function () {
     });
   }
 
-  // --- PANGGIL FUNGSI LOAD SAAT DOKUMEN SIAP ---
-  // Delegated handler: buka gambar bukti transfer di tab baru
-  $("body").on("click", "#donationListBody .donation-detail-btn", function (e) {
-    e.preventDefault();
-    const proof = $(this).data("proof") || "";
-    if (!proof) {
-      alert("Tidak ada bukti transfer terlampir untuk donasi ini.");
-      return;
-    }
-
-    let url = proof;
-    // Jika bukan URL absolut, buat path relatif dari folder admin ke root
-    if (!/^https?:\/\//i.test(proof)) {
-      if (proof.charAt(0) === "/") {
-        url = window.location.origin + proof; // absolute path from root
-      } else {
-        url = "../" + proof; // likely stored as 'img/..' so go up from /admin/
-      }
-    }
-
-    window.open(url, "_blank");
-  });
-  loadAdoptions();
-  loadDonations();
-
-  // Sinkronisasi display file input
+  // SINKRONISASI DATA & TAMPILAN
   updateFileNameDisplay("eduImage", "eduFileName");
   updateFileNameDisplay("catImage", "catFileName");
 
-  // Logika untuk menampilkan/menyembunyikan form (Toggle button click handlers)
   $("#showAddCatFormBtn").on("click", function () {
     $("#addCatForm")[0].reset();
-    $("#addCatForm").removeData("current-image-url"); // Clear old URL data
-    $("#catFileName").text("(Belum ada file dipilih)"); // Reset display
+    $("#addCatForm").removeData("current-image-url");
+    $("#catFileName").text("(Belum ada file dipilih)");
     $("#addCatFormContainer").find("h3").text("Form Tambah Kucing");
     $("#addCatForm")
       .find('button[type="submit"]')
@@ -386,8 +350,8 @@ $(document).ready(function () {
 
   $("#showAddEducationFormBtn").on("click", function () {
     $("#addEducationForm")[0].reset();
-    $("#addEducationForm").removeData("current-image-url"); // Clear old URL data
-    $("#eduFileName").text("(Belum ada file dipilih)"); // Reset display
+    $("#addEducationForm").removeData("current-image-url");
+    $("#eduFileName").text("(Belum ada file dipilih)");
     $("#addEducationFormContainer").find("h3").text("Form Tambah Artikel");
     $("#addEducationForm")
       .find('button[type="submit"]')

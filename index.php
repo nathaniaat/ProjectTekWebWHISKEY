@@ -1,10 +1,8 @@
 <?php
-// Wajibkan login sebelum mengakses halaman ini
+
 include 'config.php';
 check_session(); 
 
-// Data Kucing dan Edukasi yang dibutuhkan di Halaman Utama tidak perlu dipanggil di sini, 
-// karena JavaScript akan memanggilnya melalui api.php
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -294,7 +292,6 @@ check_session();
     <!-- ---------- DONATION SECTION ---------- -->
 
     <section id="donationPage">
-      <!-- 1. HERO SECTION  -->
       <section
         id="donationPageHero"
         class="pt-16 lg:pt-0 hero-whiskey-style bg-soft-blue lg:min-h-[550px]"
@@ -341,7 +338,6 @@ check_session();
         </div>
       </section>
 
-      <!-- 2. IMPACT COUNTER SECTION -->
       <section class="py-16 bg-white">
         <div class="max-w-6xl mx-auto px-6 text-center">
           <h2 class="headerTxt700 text-3xl mb-6 text-dark-blue">
@@ -352,7 +348,6 @@ check_session();
             jalanan mendapatkan makanan, tempat tinggal, dan kasih sayang yang
             layak.
           </p>
-          <!-- Kolom Dampak -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             <!-- Card 1 -->
             <div
@@ -397,7 +392,7 @@ check_session();
         </div>
       </section>
 
-      <!-- 3. DONATION FORM SECTION  -->
+      <!-- DONATION FORM SECTION  -->
       <div id="donationModal"
       class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
 
@@ -659,6 +654,7 @@ check_session();
       </div>
     </footer>
     <!-- ---------- FOOTER ENDS ---------- -->
+
     <!-- ---------- MODAL START ---------- -->
     <div
       id="catDetailModal"
@@ -845,7 +841,7 @@ check_session();
       </div>
     </div>
 
-    <!-- modal article -->
+    <!-- MODAL ARTICLE -->
     <div id="articleModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-[200]">
       <div class="bg-white w-11/12 md:w-2/3 lg:w-1/2 p-6 rounded-2xl shadow-xl relative max-h-[90vh] overflow-y-auto flex flex-col items-center">
         <button id="articleClose" class="absolute top-3 right-3 text-2xl hover:text-red-500 transition">&times;</button>
@@ -854,7 +850,7 @@ check_session();
         <p id="articleModalContent" class="bodyTxt text-gray-700 leading-relaxed text-left"></p>
       </div>
     </div>  
-    <!-- ---------- MODAL ENDS ---------- -->
+    <!--  MODAL ARTICLE ENDS -->
      <script src="script.js"></script>
   </body>
 </html>

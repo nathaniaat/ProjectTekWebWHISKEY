@@ -111,23 +111,20 @@ footer {
   font-style: italic;
 }
 
-/* Wrapper untuk memotong tampilan input */
 .file-wrapper {
   position: relative;
   overflow: hidden;
   display: inline-block;
 }
 
-/* Input aslinya */
 .file-input-custom {
-  font-size: 100px; /* supaya teks bawaan bergeser jauh */
-  opacity: 0; /* sembunyikan input sebenarnya */
+  font-size: 100px;
+  opacity: 0;
   position: absolute;
   left: 0;
   top: 0;
 }
 
-/* Tombol custom */
 .file-button {
   padding: 10px 20px;
   border: 1px solid #4caf50;

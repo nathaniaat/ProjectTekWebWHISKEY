@@ -3,7 +3,7 @@ include 'config.php';
 
 header('Content-Type: application/json');
 
-// Logika API untuk GET data publik
+// GET CATS
 $action = $_GET['action'] ?? '';
 
 if ($action === 'getCats') {
@@ -12,14 +12,13 @@ if ($action === 'getCats') {
     $data = [];
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            // Ubah format gender untuk front-end filter
             $row['data_gender'] = strtolower($row['gender']); 
             $data[] = $row;
         }
     }
     echo json_encode(['success' => true, 'data' => $data]);
 } 
-// Tambahkan GET Education Content (ambil dari admin_dashboard.php lama)
+// GET EDUCATION ARTICLES
 else if ($action === 'getEducation') {
     $sql = "SELECT id, title, author, publish_date, category, image_url, teaser_content, content FROM education_content ORDER BY publish_date DESC";
     $result = $conn->query($sql);
@@ -31,7 +30,8 @@ else if ($action === 'getEducation') {
     }
     echo json_encode(['success' => true, 'data' => $data]);
 }
-// Tambahkan Logika POST Submit Donation (Sederhana)
+
+// POST SUBMIT DONATION
 else if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'submitDonation') {
     
     $amount = filter_var($_POST['amount'] ?? 0, FILTER_VALIDATE_INT);
@@ -46,35 +46,27 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === '
     $proof_url = null;
     $upload_success = true;
     
-    // --- LOGIKA UPLOAD FILE DIMULAI ---
     if (isset($_FILES['proof']) && $_FILES['proof']['error'] === UPLOAD_ERR_OK) {
         $file = $_FILES['proof'];
-        $destination_dir = 'uploads/proofs/'; // PASTIKAN FOLDER INI ADA DAN WRITABLE!
+        $destination_dir = 'uploads/proofs/';
         
-        // Buat folder jika belum ada
         if (!is_dir($destination_dir)) {
             mkdir($destination_dir, 0777, true);
         }
 
         $file_extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-        // Buat nama file unik (misalnya: donation_20251125_timestamp.jpg)
+        // FORMAT NAMA FILE BUKTI DONASI
         $new_file_name = 'donation_' . date('Ymd_His') . '.' . $file_extension;
         $destination_path = $destination_dir . $new_file_name;
 
-        // Pindahkan file dari lokasi sementara ke lokasi permanen
         if (move_uploaded_file($file['tmp_name'], $destination_path)) {
-            $proof_url = $destination_path; // Simpan path relatif ke database
+            $proof_url = $destination_path;
         } else {
-            // Gagal memindahkan file (mungkin karena izin folder)
             $upload_success = false;
             error_log("Gagal memindahkan file bukti donasi: " . $file['name']);
-            // Kita tetap melanjutkan INSERT ke DB, tetapi proof_url akan tetap null.
-            // Anda bisa mengubah ini menjadi kegagalan total jika bukti wajib.
         }
     }
-    // --- LOGIKA UPLOAD FILE SELESAI ---
 
-    // Gunakan Prepared Statement yang sudah ada
     $stmt = $conn->prepare("INSERT INTO donations (amount, payment_method, proof_image_url) VALUES (?, ?, ?)");
     $stmt->bind_param("iss", $amount, $method, $proof_url);
     
@@ -86,9 +78,8 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === '
     }
     $stmt->close();
 }
-// Tambahkan Logika POST Submit Adoption (Sederhana)
+
 else if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'submitAdoption') {
-    // Ambil data dari formulir di script.js
     $catName = $conn->real_escape_string($_POST['cat_name'] ?? 'Kucing Pilihan');
     $firstName = $conn->real_escape_string($_POST['firstName']);
     $lastName = $conn->real_escape_string($_POST['lastName']);
@@ -108,7 +99,6 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === '
     }
     $stmt->close();
 }
-// ... (Tambahkan endpoint publik lainnya) ...
 
 $conn->close();
 ?>

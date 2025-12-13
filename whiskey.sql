@@ -1,9 +1,10 @@
+-- SETTING MODE SQL, TRANSAKSI, DAN TIME ZONE
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
 
-/* ADOPTION APPLICATION */
+-- ADOPTION APPLICATION
 
 CREATE TABLE `adoption_applications` (
   `id` int(11) NOT NULL,
@@ -24,7 +25,7 @@ INSERT INTO `adoption_applications` (`id`, `cat_name`, `first_name`, `last_name`
 (7, 'GitHub Cat', 'Nathania', 'Tabemono', 'github@mail.com', '0813472982', 'Mars', '132456', 'house', '2025-11-25 13:04:29', 'pending');
 
 
-/* CATS DATA */
+-- CATS DATA 
 
 CREATE TABLE `cats` (
   `id` int(11) NOT NULL,
@@ -47,7 +48,7 @@ INSERT INTO `cats` (`id`, `name`, `age`, `gender`, `image_url`, `backstory`, `bg
 (8, 'GitHub Cat', '1 year', 'female', 'img/cats/img_69259e2ae83c1.png', 'GitHub Cat?', 'bg-soft-pink', '2025-11-25 12:16:42');
 
 
-/* DONATIONS */
+-- DONATIONS
 
 CREATE TABLE `donations` (
   `id` int(11) NOT NULL,
@@ -62,7 +63,7 @@ INSERT INTO `donations` (`id`, `amount`, `payment_method`, `proof_image_url`, `d
 (4, 100000, '1234567890 (Mandiri)', 'uploads/proofs/donation_20251125_140448.jpg', '2025-11-25 13:04:48');
 
 
-/* EDUATION ARTICLES */
+-- EDUATION ARTICLES
 
 CREATE TABLE `education_content` (
   `id` int(11) NOT NULL,
@@ -82,7 +83,7 @@ INSERT INTO `education_content` (`id`, `title`, `author`, `publish_date`, `categ
 (3, 'Bahasa Ekor Kucing', 'Writer', '2025-11-10', 'Behavior', 'img/artikelEkorKucing.avif', 'Ternyata ekor kucing bisa bicara lho! Pahami artinya di sini.', 'Ekor tegak berarti senang. Ekor mengembang berarti takut. Ekor berkedut berarti sedang fokus atau kesal.', '2025-11-25 09:20:37');
 
 
-/* USERS */
+-- USERS
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
@@ -98,7 +99,7 @@ INSERT INTO `users` (`id`, `username`, `password_hash`, `email`, `role`, `full_n
 (1, 'user', '*0D22657BD7E16A953E5DEF4EC9E5933C4931755C', 'user@example.com', 'user', 'Pengguna Biasa', '2025-11-25 09:22:17'),
 (2, 'admin', '*01A6717B58FF5C7EAFFF6CB7C96F7428EA65FE4C', 'admin@example.com', 'admin', 'Administrator Sistem', '2025-11-25 09:22:17');
 
-/* EDIT */
+-- ID HARUS UNIQUE
 ALTER TABLE `adoption_applications`
   ADD PRIMARY KEY (`id`);
 
@@ -115,6 +116,8 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`),
   ADD UNIQUE KEY `email` (`email`);
+
+-- ID OTOMATIS UNTUK SETIAP DATA BARU (DI INCREMENT)
 
 ALTER TABLE `adoption_applications`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;

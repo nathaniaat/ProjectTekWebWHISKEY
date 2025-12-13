@@ -1,7 +1,7 @@
 <?php
 include 'config.php';
 
-// Jika sudah login, redirect sesuai role
+// ROLE
 if (isset($_SESSION['user_id'])) {
     if ($_SESSION['role'] === 'admin') {
         header("Location: admin/admin.php");
@@ -13,12 +13,11 @@ if (isset($_SESSION['user_id'])) {
 
 $error = '';
 
+// CEK USERNAME & PASSWORD
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $conn->real_escape_string($_POST['username']);
     $password = $_POST['password'];
 
-    // Query untuk mencari user berdasarkan username dan password yang di-hash
-    // Karena kita menggunakan PASSWORD() di INSERT, kita bisa menggunakan fungsi yang sama untuk verifikasi di MySQL.
     $sql = "SELECT id, username, role, password_hash FROM users WHERE username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
@@ -28,8 +27,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
         
-        // Verifikasi password (menggunakan fungsi PASSWORD() untuk kompatibilitas skema)
-        // Note: Idealnya, verifikasi ini dilakukan di PHP dengan password_verify() jika Anda menggunakan bcrypt.
         $sql_check_pass = "SELECT id FROM users WHERE username = ? AND password_hash = PASSWORD(?)";
         $stmt_check = $conn->prepare($sql_check_pass);
         $stmt_check->bind_param("ss", $username, $password);
