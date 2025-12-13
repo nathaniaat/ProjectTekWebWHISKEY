@@ -495,22 +495,24 @@ check_session();
 
           <!-- Upload Bukti Pembayaran -->
           <div class="mt-8 text-center">
-          <label class="headerTxt400 text-xl mb-3 block">
-            Upload Bukti Pembayaran
-          </label>
+            <label class="headerTxt400 text-xl mb-3 block">
+              Upload Bukti Pembayaran
+            </label>
 
-          <div class="flex justify-center">
-            <div class="file-wrapper">
-              <span class="file-button">Choose File</span>
-              <input 
-                type="file" 
-                id="proofUpload" 
-                class="file-input-custom"
-                accept="image/*,application/pdf"
-              />
+            <div class="flex justify-center">
+              <div class="file-wrapper">
+                <span class="file-button">Choose File</span>
+                <input 
+                  type="file" 
+                  id="proofUpload" 
+                  class="file-input-custom"
+                  accept="image/*,application/pdf"
+                />
+              </div>
             </div>
-          </div>
+
             <p id="uploadedFileName" class="mt-3 text-sm text-gray-700"></p>
+
             <button
               id="donate_btnCheckoutFinal"
               class="btn-green font-bold px-8 py-3 rounded-full mt-8 w-full transition duration-300"
@@ -606,7 +608,7 @@ check_session();
                 <a href="#" class="category-filter bg-soft-blue text-dark-blue text-center hover:opacity-80 px-3 py-2 rounded-full transition">Tips</a>
                 <a href="#" class="category-filter bg-soft-pink text-dark-blue text-center hover:opacity-80 px-3 py-2 rounded-full transition">Health</a>
                 <a href="#" class="category-filter bg-gray-100 text-dark-blue text-center hover:opacity-80 px-3 py-2 rounded-full transition">Behavior</a>
-                <a href="#" class="category-filter text-red-500 hover:text-red-700 font-bold text-center transition px-3 py-2 rounded-full">Show All</a>
+                <a id="showAllButton" href="#" class="category-filter text-red-500 hover:text-red-700 font-bold text-center transition px-3 py-2 rounded-full">Show All</a>
               </div>
             </div>
           </aside>
@@ -845,11 +847,13 @@ check_session();
     <div id="articleModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-[200]">
       <div class="bg-white w-11/12 md:w-2/3 lg:w-1/2 p-6 rounded-2xl shadow-xl relative max-h-[90vh] overflow-y-auto flex flex-col items-center">
         <button id="articleClose" class="absolute top-3 right-3 text-2xl hover:text-red-500 transition">&times;</button>
-        <img id="articleModalImage" src="" class="w-full max-h-64 object-contain rounded-lg mb-4"/>
+        <img id="articleModalImage" class="w-full max-h-64 object-contain rounded-lg mb-4"/>
         <h2 id="articleModalTitle" class="headerTxt700 text-2xl mb-3 text-center"></h2>
-        <p id="articleModalContent" class="bodyTxt text-gray-700 leading-relaxed text-left"></p>
+        <div id="articleModalContent" class="bodyTxt text-gray-700 leading-relaxed text-justify article-content">
+        </div>
       </div>
-    </div>  
+    </div>
+
     <!--  MODAL ARTICLE ENDS -->
      <script src="script.js"></script>
   </body>

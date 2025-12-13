@@ -99,7 +99,6 @@ $(document).ready(function () {
     initializeAdoptionHandlers();
   }
 
-  // DONASI
   function initializeAdoptionHandlers() {
     $(".view-detail-btn").off("click");
     $(".close-modal-btn").off("click");
@@ -339,8 +338,21 @@ $(document).ready(function () {
     proofInput.addEventListener("change", function () {
       const file = this.files[0];
       const fileNameDisplay = document.getElementById("uploadedFileName");
-      if (fileNameDisplay)
-        fileNameDisplay.textContent = file ? "File dipilih: " + file.name : "";
+
+      if (file && fileNameDisplay) {
+        const fileUrl = URL.createObjectURL(file);
+
+        fileNameDisplay.innerHTML = `
+        File yang dipilih: 
+        <a href="${fileUrl}" 
+           target="_blank" 
+           class="text-blue-600 underline hover:text-blue-800">
+          ${file.name}
+        </a>
+      `;
+      } else if (fileNameDisplay) {
+        fileNameDisplay.textContent = "";
+      }
       updateCheckoutButton();
     });
   }
@@ -450,6 +462,8 @@ $(document).ready(function () {
   }
 
   let articlesData = [];
+  const DEFAULT_VISIBLE = 5;
+  let isExpanded = false;
 
   function renderArticles(data) {
     const homeContainer = $("#home-articles-container");
@@ -484,7 +498,7 @@ $(document).ready(function () {
     if (eduContainer.length) {
       eduContainer.empty();
       data.forEach((article, index) => {
-        const hiddenClass = index >= 2 ? "hidden" : "";
+        const hiddenClass = index >= DEFAULT_VISIBLE ? "hidden" : "";
         let badgeColorClass = "bg-gray-100 text-dark-blue";
         if (article.category === "Health") {
           badgeColorClass = "bg-soft-pink text-dark-blue";
@@ -521,7 +535,7 @@ $(document).ready(function () {
       });
     }
 
-    if (data.length > 2) {
+    if (data.length > DEFAULT_VISIBLE) {
       $("#loadMoreBtn").show();
     } else {
       $("#loadMoreBtn").hide();
@@ -544,7 +558,9 @@ $(document).ready(function () {
   $(document).on("click", ".read-more-article", function (e) {
     e.preventDefault();
     $("#articleModalTitle").text($(this).data("title"));
-    $("#articleModalContent").html($(this).data("content"));
+    const rawContent = $(this).data("content") || "";
+    const formattedContent = rawContent.replace(/\n\n/g, "<br><br>").replace(/\n/g, "<br>");
+    $("#articleModalContent").html(formattedContent);
     $("#articleModalImage").attr("src", $(this).data("image"));
     $("#articleModal").removeClass("hidden").addClass("flex");
   });
@@ -579,51 +595,61 @@ $(document).ready(function () {
       "shadow-md font-bold ring-2 ring-offset-2 ring-blue-500 ring-pink-500 ring-green-500"
     );
 
+    // SHOW ALL
     if (category === "Show All") {
       $("#articleSearchInput").val("");
-      $(".article-item").removeClass("hidden").show();
-      renderArticles(articlesData);
-    } else {
-      $("#articleSearchInput").val("");
 
-      $(this).addClass(
-        "shadow-md font-bold ring-2 ring-offset-2 ring-blue-500"
-      );
+      if (isExpanded) return;
 
-      $(".article-item").each(function () {
-        const articleCategory = $(this).find(".category-label").text().trim();
-        if (articleCategory === category) {
-          $(this).removeClass("hidden").show();
-        } else {
-          $(this).addClass("hidden").hide();
-        }
-      });
-      $("#loadMoreBtn").hide();
+      $(".article-item")
+        .removeClass("hidden")
+        .show()
+        .slice(DEFAULT_VISIBLE)
+        .addClass("hidden")
+        .hide();
+
+      isExpanded = false;
+      $("#loadMoreBtn").text("Load More").show();
+      return;
     }
+
+    // FILTER CATEGORY
+    $(this).addClass("shadow-md font-bold ring-2 ring-offset-2 ring-blue-500");
+
+    isExpanded = false;
+    $("#loadMoreBtn").hide();
+
+    $(".article-item").each(function () {
+      const articleCategory = $(this).find(".category-label").text().trim();
+      if (articleCategory === category) {
+        $(this).removeClass("hidden").show();
+      } else {
+        $(this).addClass("hidden").hide();
+      }
+    });
   });
 
   $("#loadMoreBtn").on("click", function (e) {
     e.preventDefault();
     const $btn = $(this);
 
-    if ($btn.text().trim() === "Load More") {
+    if (!isExpanded) {
+      // LOAD MORE
       const hiddenArticles = $(
         "#education-articles-container .article-item.hidden"
       );
       hiddenArticles.removeClass("hidden").hide().fadeIn("slow");
       $btn.text("View Less");
+      isExpanded = true;
     } else {
-      const articlesToHide = $(
-        "#education-articles-container .article-item"
-      ).slice(2);
-      articlesToHide.fadeOut("fast", function () {
-        $(this).addClass("hidden");
-      });
-      $("html, body").animate(
-        { scrollTop: $("#educationPage").offset().top },
-        500
-      );
+      // VIEW LESS
+      const articlesToHide = $("#education-articles-container .article-item").slice(DEFAULT_VISIBLE);
+      articlesToHide.fadeOut("fast", function () {$(this).addClass("hidden");});
+
+      $("html, body").animate({ scrollTop: $("#educationPage").offset().top}, 500);
+
       $btn.text("Load More");
+      isExpanded = false;
     }
   });
 

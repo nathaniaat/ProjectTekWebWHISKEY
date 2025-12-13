@@ -109,20 +109,25 @@ $(document).ready(function () {
     return { mode: mode, formData: formData, id: id };
   }
 
-  const updateFileNameDisplay = (inputElementId, displayElementId) => {
-    const fileInput = document.getElementById(inputElementId);
-    const fileNameDisplay = document.getElementById(displayElementId);
+  function enableImagePreview(inputId, previewId, fileNameId) {
+    const input = document.getElementById(inputId);
+    const preview = document.getElementById(previewId);
+    const fileName = document.getElementById(fileNameId);
 
-    if (fileInput && fileNameDisplay) {
-      fileInput.addEventListener("change", function () {
-        if (this.files.length > 0) {
-          fileNameDisplay.textContent = this.files[0].name;
-        } else {
-          fileNameDisplay.textContent = "(Belum ada file dipilih)";
-        }
-      });
-    }
-  };
+    if (!input || !preview) return;
+
+    input.addEventListener("change", function () {
+      if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          preview.src = e.target.result;
+        };
+        reader.readAsDataURL(this.files[0]);
+
+        if (fileName) fileName.textContent = this.files[0].name;
+      }
+    });
+  }
 
   // TAMBAH/UPDATE KUCING
   $("#addCatForm").on("submit", function (e) {
@@ -162,6 +167,20 @@ $(document).ready(function () {
 
           $(formId).data("current-image-url", imageUrl);
 
+          if (type === "cat" && imageUrl) {
+            $("#catImagePreview").attr(
+              "src",
+              imageUrl.startsWith("http") ? imageUrl : "../" + imageUrl
+            );
+          }
+
+          if (type === "education" && imageUrl) {
+            $("#eduImagePreview").attr(
+              "src",
+              imageUrl.startsWith("http") ? imageUrl : "../" + imageUrl
+            );
+          }
+
           $(formContainerId)
             .find("h3")
             .text(`Edit ${type === "cat" ? "Kucing" : "Artikel"} ID: ${id}`);
@@ -177,8 +196,10 @@ $(document).ready(function () {
             ? imageUrl
             : "../" + imageUrl;
 
-          $("#" + fileNameDisplayId).html(imageUrl? `URL Lama: <a href="${href}" target="_blank"class="text-blue-600 underline hover:text-blue-800">${fileName}</a>`
-            : "Tidak ada gambar sebelumnya"
+          $("#" + fileNameDisplayId).html(
+            imageUrl
+              ? `URL Lama: <span class="ml-1"> <a href="${href}" target="_blank" class="text-blue-600 underline hover:text-blue-800 pointer-events-auto"> ${fileName} </a> </span>`
+              : "Tidak ada gambar sebelumnya"
           );
 
           if (type === "cat") {
@@ -194,7 +215,9 @@ $(document).ready(function () {
             $("#eduTitle").val(data.title || "");
             $("#eduAuthor").val(data.author || "");
             $("#eduDate").val(data.publish_date || "");
-            $("#eduContent").val(data.content || "");
+            $("#eduContent").val(
+              (data.content || "").replace(/<br\s*\/?>/gi, "\n")
+            );
             $("#eduCategory").val(data.category || "");
             $("#eduTeaserContent").val(data.teaser_content || "");
             $("#eduImage").prop("required", false);
@@ -329,12 +352,11 @@ $(document).ready(function () {
   }
 
   // SINKRONISASI DATA & TAMPILAN
-  updateFileNameDisplay("eduImage", "eduFileName");
-  updateFileNameDisplay("catImage", "catFileName");
 
   $("#showAddCatFormBtn").on("click", function () {
     $("#addCatForm")[0].reset();
     $("#addCatForm").removeData("current-image-url");
+    $("#catImagePreview").attr("src", "../img/placeholder.png");
     $("#catFileName").text("(Belum ada file dipilih)");
     $("#addCatFormContainer").find("h3").text("Form Tambah Kucing");
     $("#addCatForm")
@@ -351,6 +373,7 @@ $(document).ready(function () {
   $("#showAddEducationFormBtn").on("click", function () {
     $("#addEducationForm")[0].reset();
     $("#addEducationForm").removeData("current-image-url");
+    $("#eduImagePreview").attr("src", "../img/placeholder.png");
     $("#eduFileName").text("(Belum ada file dipilih)");
     $("#addEducationFormContainer").find("h3").text("Form Tambah Artikel");
     $("#addEducationForm")
@@ -363,4 +386,10 @@ $(document).ready(function () {
 
     $("#addEducationFormContainer").slideToggle(200);
   });
+
+  enableImagePreview("catImage", "catImagePreview", "catFileName");
+  enableImagePreview("eduImage", "eduImagePreview", "eduFileName");
+
+  loadAdoptions();
+  loadDonations();
 });

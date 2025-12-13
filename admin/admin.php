@@ -80,14 +80,19 @@ $counts_data = [
                     <label class="block text-xs font-medium text-gray-700 mb-2">Upload Cat Image</label>
 
                     <div class="flex items-center space-x-3">
-                        <label for="catImage" class="relative inline-block cursor-pointer flex-shrink-0">
-                            <span
-                                class="btn-outline-green font-semibold px-4 py-1 rounded-lg shadow-sm hover:shadow-md transition duration-150">
-                                Choose Image
-                            </span>
-                            <input type="file" id="catImage" name="image_file" accept="image/*"
-                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" required />
+                        <input type="file" id="catImage" name="image_file" accept="image/*" class="hidden" required />
+
+                        <label for="catImage" class="cursor-pointer">
+                        <img
+                            id="catImagePreview"
+                            src="../img/placeholder.png"
+                            class="w-40 h-28 object-cover rounded-lg border hover:opacity-80 transition"
+                        />
                         </label>
+
+                        <span id="catFileName" class="text-sm text-gray-600 truncate max-w-[200px]">
+                        (No file chosen)
+                        </span>
 
                         <span id="catFileName" class="text-sm text-gray-600 truncate max-w-[200px]">
                             (No file chosen)
@@ -191,40 +196,35 @@ $counts_data = [
                 </div>
 
                 <div class="md:col-span-3">
-                    <label class="block text-xs font-medium text-gray-700 mb-2">Upload Article Image</label>
+                    <label class="block text-xs font-medium text-gray-700 mb-2">
+                        Upload Article Image
+                    </label>
 
                     <div class="flex items-center space-x-3">
-                        <label for="eduImage" class="relative inline-block cursor-pointer flex-shrink-0">
-                            <span
-                                class="btn-outline-green font-semibold px-4 py-1 rounded-lg shadow-sm hover:shadow-md transition duration-150">
-                                Choose Image
-                            </span>
-                            <input type="file" id="eduImage" name="image_file" accept="image/*"
-                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" required />
+                        <input type="file" id="eduImage" name="image_file" accept="image/*" class="hidden" />
+                        <label for="eduImage" class="cursor-pointer">
+                            <img
+                                id="eduImagePreview"
+                                src="../img/placeholder.png"
+                                class="w-40 h-28 object-cover rounded-lg border hover:opacity-80 transition"
+                            />
                         </label>
-
                         <span id="eduFileName" class="text-sm text-gray-600 truncate max-w-[200px]">
-                            (No file chosen)
+                        (No file chosen)
                         </span>
                     </div>
                 </div>
-
                 <div class="md:col-span-3">
                     <label for="eduTeaserContent" class="block text-xs font-medium text-gray-700 mb-1">Summary</label>
-                    <textarea id="eduTeaserContent" placeholder="Enter Content Summary"
-                        class="w-full p-2 border rounded h-24" required></textarea>
+                    <textarea id="eduTeaserContent" placeholder="Enter Content Summary" class="w-full p-2 border rounded h-24" required></textarea>
                 </div>
-
                 <div class="md:col-span-3">
                     <label for="eduContent" class="block text-xs font-medium text-gray-700 mb-1">Full Content</label>
-                    <textarea id="eduContent" placeholder="Enter Full Content" class="w-full p-2 border rounded h-36"
-                        required></textarea>
+                    <textarea id="eduContent" placeholder="Enter Full Content" class="w-full p-2 border rounded h-36" required></textarea>
                 </div>
 
                 <div class="md:col-span-3 text-right">
-                    <button type="submit"
-                        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 font-semibold">Simpan
-                        Artikel</button>
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 font-semibold">Simpan Artikel</button>
                 </div>
             </form>
         </div>
